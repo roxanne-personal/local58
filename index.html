@@ -148,7 +148,7 @@
       background: var(--mid-navy);
       border-left: 4px solid var(--red);
       padding: 24px 28px;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
       line-height: 1.85;
       font-size: 0.93rem;
       color: rgba(240,240,240,0.82);
@@ -164,6 +164,23 @@
     }
 
     .text-section p + p { margin-top: 10px; }
+
+    /* ── Nav link ── */
+    .nav-link {
+      display: inline-block;
+      margin-bottom: 32px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid rgba(240,192,48,0.4);
+      padding: 8px 16px;
+      transition: background 0.15s;
+    }
+
+    .nav-link:hover { background: rgba(240,192,48,0.1); }
 
     /* ── Last modified ── */
     .last-modified {
@@ -209,7 +226,7 @@
 
     <!-- Image with static overlay -->
     <div class="image-wrap">
-      <img src="we'llberightback.png" alt="Local 58 — Please Stand By">
+      <img src="we_llberightback.png" alt="Local 58 — Please Stand By">
       <canvas id="img-static"></canvas>
     </div>
 
@@ -219,6 +236,9 @@
       <p>Welcome to Local58, created by Kris Straub. My name is Roxanne, and I have no official affilliaton with Local58 and Kris, but I am a large fan of the series, and when I saw I could buy the ORIGINAL domain, I emptied my wallet haha.</p>
       <p>Local 58 has been broadcasting since before anyone can remember.</p>
     </div>
+
+    <!-- Guestbook link -->
+    <a class="nav-link" href="guestbook.html">&#x25BA; Sign the Viewer Registry</a>
 
     <!-- Last modified (auto-updates) -->
     <div class="last-modified">
