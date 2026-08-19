@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOCAL 58 — WCLV-TV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #080d1a;
+      --mid-navy: #0f1a35;
+      --red:      #c8171d;
+      --gold:     #f0c030;
+      --white:    #f0f0f0;
+      --dim:      #7a8fa8;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Full-page static canvas ── */
+    #static-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      opacity: 0.07;
+      z-index: 100;
+    }
+
+    /* ── CRT scanlines ── */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 2px,
+        rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 4px
+      );
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--red);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .station-id {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.15em;
+      color: var(--white);
+    }
+
+    .station-id span {
+      color: var(--gold);
+      font-size: 1.8rem;
+    }
+
+    .broadcast-status {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.1em;
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    .live-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin-right: 5px;
+      animation: blink 1.2s step-start infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── Ticker ── */
+    .ticker {
+      background: var(--red);
+      color: var(--gold);
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      padding: 6px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker-scroll 22s linear infinite;
+    }
+
+    @keyframes ticker-scroll {
+      from { transform: translateX(100vw); }
+      to   { transform: translateX(-100%); }
+    }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    /* ── Image with its own static overlay ── */
+    .image-wrap {
+      position: relative;
+      margin-bottom: 32px;
+      border: 2px solid rgba(240,192,48,0.35);
+      box-shadow: 0 0 30px rgba(200,23,29,0.25);
+    }
+
+    .image-wrap img {
+      display: block;
+      width: 100%;
+    }
+
+    #img-static {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      opacity: 0.14;
+    }
+
+    /* ── Text section ── */
+    .text-section {
+      background: var(--mid-navy);
+      border-left: 4px solid var(--red);
+      padding: 24px 28px;
+      margin-bottom: 32px;
+      line-height: 1.85;
+      font-size: 0.93rem;
+      color: rgba(240,240,240,0.82);
+    }
+
+    .text-section h2 {
+      font-family: 'Oswald', sans-serif;
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .text-section p + p { margin-top: 10px; }
+
+    /* ── Last modified ── */
+    .last-modified {
+      border-top: 1px solid rgba(240,192,48,0.25);
+      padding-top: 14px;
+      font-size: 0.72rem;
+      color: var(--dim);
+      letter-spacing: 0.08em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .last-modified .label {
+      text-transform: uppercase;
+      color: var(--red);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Full-page static -->
+  <canvas id="static-canvas"></canvas>
+
+  <header>
+    <div class="station-id">local<span>58</span> &mdash; WCLV-TV</div>
+    <div class="broadcast-status">
+      <span class="live-dot"></span>SIGNAL ACTIVE<br>CHANNEL 58
+    </div>
+  </header>
+
+  <div class="ticker">
+    <span class="ticker-inner">
+      LOCAL 58 &mdash; WCLV-TV &nbsp;&bull;&nbsp; PLEASE STAND BY &nbsp;&bull;&nbsp;
+      DO NOT ADJUST YOUR SET &nbsp;&bull;&nbsp;
+      WE WILL RETURN TO YOUR REGULARLY SCHEDULED PROGRAMMING &nbsp;&bull;&nbsp;
+      LOCAL 58 &mdash; WCLV-TV &nbsp;&bull;&nbsp; PLEASE STAND BY &nbsp;&bull;&nbsp;
+      DO NOT ADJUST YOUR SET &nbsp;&bull;&nbsp;
+    </span>
+  </div>
+
+  <main>
+
+    <!-- Image with static overlay -->
+    <div class="image-wrap">
+      <img src="we_llberightback.png" alt="Local 58 — Please Stand By">
+      <canvas id="img-static"></canvas>
+    </div>
+
+    <!-- Text: edit this section -->
+    <div class="text-section">
+      <h2>// Transmission</h2>
+      <p>Add your text here. This could be a site description, episode guide, lore breakdown, or anything you'd like visitors to see.</p>
+      <p>More content goes here. Local 58 has been broadcasting since before anyone can remember.</p>
+    </div>
+
+    <!-- Last modified (auto-updates) -->
+    <div class="last-modified">
+      <span class="label">Last Broadcast Update:</span>
+      <span id="last-modified-date"></span>
+    </div>
+
+  </main>
+
+  <script>
+    /* ── Full-page static ── */
+    const staticCanvas = document.getElementById('static-canvas');
+    const sCtx = staticCanvas.getContext('2d');
+
+    function resizeStatic() {
+      staticCanvas.width  = window.innerWidth;
+      staticCanvas.height = window.innerHeight;
+    }
+    resizeStatic();
+    window.addEventListener('resize', resizeStatic);
+
+    function drawStatic(canvas, ctx) {
+      const w = canvas.width, h = canvas.height;
+      const imageData = ctx.createImageData(w, h);
+      const d = imageData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const v = Math.random() > 0.5 ? 255 : 0;
+        d[i] = d[i+1] = d[i+2] = v;
+        d[i+3] = 255;
+      }
+      ctx.putImageData(imageData, 0, 0);
+    }
+
+    /* ── Image static overlay ── */
+    const imgStaticCanvas = document.getElementById('img-static');
+    const iCtx = imgStaticCanvas.getContext('2d');
+    const imgEl = document.querySelector('.image-wrap img');
+
+    function syncImgCanvas() {
+      imgStaticCanvas.width  = imgEl.offsetWidth  || 640;
+      imgStaticCanvas.height = imgEl.offsetHeight || 360;
+    }
+    imgEl.addEventListener('load', syncImgCanvas);
+    syncImgCanvas();
+    window.addEventListener('resize', syncImgCanvas);
+
+    /* ── Animation loop ── */
+    function animate() {
+      drawStatic(staticCanvas, sCtx);
+      drawStatic(imgStaticCanvas, iCtx);
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    /* ── Last modified ── */
+    document.getElementById('last-modified-date').textContent =
+      new Date(document.lastModified).toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+  </script>
+
+</body>
+</html>
