@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOCAL 58 — WCLV-TV Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:  #080d1a;
+      --navy2: #0f1a35;
+      --red:   #c8171d;
+      --gold:  #f0c030;
+      --white: #f0f0f0;
+      --dim:   #7a8fa8;
+      --grid-border: rgba(240,192,48,0.2);
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+    }
+
+    /* ── Static canvas ── */
+    #static-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      opacity: 0.06;
+      z-index: 100;
+    }
+
+    /* ── Scanlines ── */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 2px,
+        rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px
+      );
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--red);
+      border-bottom: 3px solid var(--gold);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .station-id {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.15em;
+    }
+
+    .station-id span { color: var(--gold); font-size: 1.8rem; }
+
+    .header-right {
+      text-align: right;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.08em;
+      line-height: 1.6;
+    }
+
+    .live-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin-right: 5px;
+      animation: blink 1.2s step-start infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── Ticker ── */
+    .ticker {
+      background: var(--red);
+      border-top: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold);
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 6px 0;
+    }
+
+    .ticker-inner {
+      display: inline-block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      animation: scroll 24s linear infinite;
+    }
+
+    @keyframes scroll {
+      from { transform: translateX(100vw); }
+      to   { transform: translateX(-100%); }
+    }
+
+    /* ── TV Guide layout ── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    /* Guide header row */
+    .guide-header {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      background: var(--red);
+      border: 1px solid var(--grid-border);
+      border-bottom: none;
+    }
+
+    .guide-header div {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      color: var(--gold);
+    }
+
+    .guide-header div:first-child {
+      border-right: 1px solid var(--grid-border);
+    }
+
+    /* Guide grid */
+    .guide-grid {
+      border: 1px solid var(--grid-border);
+      margin-bottom: 36px;
+    }
+
+    .guide-row {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      border-bottom: 1px solid var(--grid-border);
+    }
+
+    .guide-row:last-child { border-bottom: none; }
+
+    .time-cell {
+      border-right: 1px solid var(--grid-border);
+      padding: 14px 10px;
+      font-size: 0.75rem;
+      color: var(--gold);
+      text-align: center;
+      background: rgba(200,23,29,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.4;
+    }
+
+    .listing-cell {
+      padding: 14px 16px;
+      background: var(--navy2);
+      transition: background 0.15s;
+    }
+
+    .guide-row:hover .listing-cell {
+      background: rgba(240,192,48,0.05);
+    }
+
+    .listing-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .listing-desc {
+      font-size: 0.78rem;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
+    .listing-ch {
+      font-size: 0.65rem;
+      color: rgba(240,192,48,0.6);
+      margin-top: 6px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Guestbook section ── */
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border-bottom: 1px solid var(--grid-border);
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* Website Goodies embed wrapper */
+    .guestbook-wrap {
+      background: var(--navy2);
+      border: 1px solid var(--grid-border);
+      padding: 24px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      border-top: 1px solid var(--grid-border);
+      padding-top: 16px;
+      font-size: 0.7rem;
+      color: var(--dim);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <canvas id="static-canvas"></canvas>
+
+  <header>
+    <div class="station-id">local<span>58</span> &mdash; WCLV-TV</div>
+    <div class="header-right">
+      <span class="live-dot"></span>ON AIR<br>
+      VIEWER REGISTRY
+    </div>
+  </header>
+
+  <div class="ticker">
+    <span class="ticker-inner">
+      WCLV-TV CHANNEL 58 &nbsp;&bull;&nbsp; VIEWER REGISTRY NOW OPEN &nbsp;&bull;&nbsp;
+      SIGN YOUR NAME TO THE BROADCAST LOG &nbsp;&bull;&nbsp;
+      YOUR PRESENCE HAS BEEN NOTED &nbsp;&bull;&nbsp;
+      THANK YOU FOR WATCHING &nbsp;&bull;&nbsp;
+      DO NOT ADJUST YOUR SET &nbsp;&bull;&nbsp;
+    </span>
+  </div>
+
+  <main>
+
+    <!-- TV Guide grid -->
+    <div class="guide-header">
+      <div>Time</div>
+      <div>Now Showing on CH. 58</div>
+    </div>
+
+    <div class="guide-grid">
+      <div class="guide-row">
+        <div class="time-cell">ALL<br>NIGHT</div>
+        <div class="listing-cell">
+          <div class="listing-title">Please Stand By</div>
+          <div class="listing-desc">Local 58 is experiencing signal difficulties. Viewers are advised to remain calm and await further instruction from the emergency broadcast system.</div>
+          <div class="listing-ch">CH. 58 &bull; WCLV-TV &bull; TV-G</div>
+        </div>
+      </div>
+
+      <div class="guide-row">
+        <div class="time-cell">LIVE</div>
+        <div class="listing-cell">
+          <div class="listing-title">Viewer Registry — Sign In</div>
+          <div class="listing-desc">Local 58 acknowledges all who tune in. Leave your name and a message in the broadcast log below. Your signal has been received.</div>
+          <div class="listing-ch">CH. 58 &bull; WCLV-TV &bull; INTERACTIVE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guestbook -->
+    <div class="section-title">// Broadcast Log — Sign the Registry</div>
+
+    <div class="guestbook-wrap">
+      <iframe
+        src="http://www.websitegoodies.com/guestbook.php?a=view&id=1741544"
+        width="100%"
+        height="600"
+        frameborder="0"
+        scrolling="yes"
+        style="border: none; display: block;">
+      </iframe>
+    </div>
+
+  </main>
+
+  <footer>
+    <a class="back-link" href="index.html">← Back to Local 58</a>
+    <span>LOCAL 58 &mdash; WCLV-TV &bull; DO NOT ADJUST YOUR SET</span>
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('static-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function drawStatic() {
+      const w = canvas.width, h = canvas.height;
+      const img = ctx.createImageData(w, h);
+      const d = img.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const v = Math.random() > 0.5 ? 255 : 0;
+        d[i] = d[i+1] = d[i+2] = v;
+        d[i+3] = 255;
+      }
+      ctx.putImageData(img, 0, 0);
+      requestAnimationFrame(drawStatic);
+    }
+    drawStatic();
+  </script>
+
+</body>
+</html>
