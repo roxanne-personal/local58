@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LOCAL 58 — WCLV-TV Broadcast Archives</title>
+  <title>LOCAL 58 — WCLV-TV Broadcast Schedule</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -129,53 +129,93 @@
       margin-bottom: 20px;
     }
 
-    /* Episodes Grid Layout */
-    .episodes-grid {
+    /* Guide header row */
+    .guide-header {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
+      grid-template-columns: 110px 1fr;
+      background: var(--red);
+      border: 1px solid var(--grid-border);
+      border-bottom: none;
+    }
+
+    .guide-header div {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      color: var(--gold);
+    }
+
+    .guide-header div:first-child {
+      border-right: 1px solid var(--grid-border);
+    }
+
+    /* Guide grid */
+    .guide-grid {
+      border: 1px solid var(--grid-border);
       margin-bottom: 36px;
     }
 
-    .episode-card {
+    .guide-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      border-bottom: 1px solid var(--grid-border);
+    }
+
+    .guide-row:last-child { border-bottom: none; }
+
+    .time-cell {
+      border-right: 1px solid var(--grid-border);
+      padding: 14px 10px;
+      font-size: 0.75rem;
+      color: var(--gold);
+      text-align: center;
+      background: rgba(200,23,29,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.4;
+    }
+
+    .listing-cell {
+      padding: 16px;
       background: var(--navy2);
-      border: 1px solid var(--grid-border);
-      padding: 20px;
       transition: background 0.15s;
     }
 
-    .episode-card:hover {
+    .guide-row:hover .listing-cell {
       background: rgba(240,192,48,0.05);
-      border-color: rgba(240,192,48,0.4);
     }
 
-    .episode-title {
+    .listing-title {
       font-family: 'Oswald', sans-serif;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: var(--white);
       letter-spacing: 0.05em;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
-    .episode-meta {
-      font-size: 0.72rem;
+    .listing-meta {
+      font-size: 0.68rem;
       color: var(--gold);
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       letter-spacing: 0.08em;
     }
 
-    .episode-desc {
-      font-size: 0.82rem;
+    .listing-desc {
+      font-size: 0.78rem;
       color: var(--dim);
       line-height: 1.6;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     /* Video Embed Container */
     .video-container {
       position: relative;
       width: 100%;
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      padding-bottom: 56.25%;
       height: 0;
       background: #000;
       border: 1px solid var(--grid-border);
@@ -219,40 +259,207 @@
     <div class="station-id">local<span>58</span> &mdash; WCLV-TV</div>
     <div class="header-right">
       <span class="live-dot"></span>ON AIR<br>
-      BROADCAST ARCHIVE
+      BROADCAST SCHEDULE
     </div>
   </header>
 
   <div class="ticker">
     <span class="ticker-inner">
-      WCLV-TV CHANNEL 58 &nbsp;&bull;&nbsp; ARCHIVED TRANSMISSIONS &nbsp;&bull;&nbsp;
+      WCLV-TV CHANNEL 58 &nbsp;&bull;&nbsp; COMPLETE PROGRAM SCHEDULE &nbsp;&bull;&nbsp;
       DO NOT ADJUST YOUR SET &nbsp;&bull;&nbsp;
-      VIEW AT YOUR OWN RISK &nbsp;&bull;&nbsp;
+      YOUR PRESENCE HAS BEEN NOTED &nbsp;&bull;&nbsp;
       THANK YOU FOR WATCHING &nbsp;&bull;&nbsp;
     </span>
   </div>
 
   <main>
 
-    <div class="section-title">// Broadcast Archives — Transmissions</div>
+    <div class="section-title">// Daily Transmission Schedule — Program Guide</div>
 
-    <div class="episodes-grid">
+    <div class="guide-header">
+      <div>Broadcast Time</div>
+      <div>Program Listing</div>
+    </div>
 
-      <div class="episode-card">
-        <div class="episode-title">CONTINGENCY</div>
-        <div class="episode-meta">ARCHIVE ID: L58-04 &bull; WCLV-TV BROADCAST</div>
-        <div class="episode-desc">"Should the worst occur, a structured plan is initiated for the preservation of the American spirit." Emergency instructions for all citizens.</div>
-        <div class="video-container">
-          <iframe src="https://www.youtube-nocookie.com/embed/gbgbnjpLswc" allowfullscreen></iframe>
+    <div class="guide-grid">
+
+      <!-- Episode 1 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>01:00 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">WEATHER SERVICE</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-G</div>
+          <div class="listing-desc">Regularly scheduled programming is interrupted to deliver a high priority bulletin concerning celestial bodies. Do not look at the moon.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/tS4z0_IeZ3o" allowfullscreen></iframe>
+          </div>
         </div>
       </div>
 
-      <div class="episode-card">
-        <div class="episode-title">WEATHER SERVICE</div>
-        <div class="episode-meta">ARCHIVE ID: L58-02 &bull; WCLV-TV BROADCAST</div>
-        <div class="episode-desc">Regular scheduled programming is interrupted to deliver a high priority bulletin concerning celestial bodies.</div>
-        <div class="video-container">
-          <iframe src="https://www.youtube-nocookie.com/embed/tS4z0_IeZ3o" allowfullscreen></iframe>
+      <!-- Episode 2 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>01:45 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">CW THREE / STEEPLECHASE</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-G</div>
+          <div class="listing-desc">A demonstration of driverless automotive technology utilizing pre-recorded pathways. Please remain inside the vehicle.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/bb8n7w5oVfU" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 3 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>02:15 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">MELD</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-PG</div>
+          <div class="listing-desc">An archived public access transmission detailing spiritual and biological integration with the celestial framework.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/fcW0qTpsg4k" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 4 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>02:45 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">A LOOK BACK AT THE 90s</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-G</div>
+          <div class="listing-desc">A nostalgic retrospective program celebrating local history, community milestones, and archival news footage.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/5a1zB1x_a2I" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 5 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>03:15 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">YOU ARE ON THE FASTEST AVAILABLE ROUTE</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-PG</div>
+          <div class="listing-desc">GPS navigation guidance system broadcast for late-night commuters. Follow the designated path without hesitation.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/zhWc-hgmtZ8" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 6 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>03:45 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">SHOW-ME STATE SPECIAL</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-G</div>
+          <div class="listing-desc">A special regional feature highlighting scenic landscapes, historical landmarks, and local industry practices across the state.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/W9LpZ87xXz8" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 7 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>04:15 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">CONTINGENCY</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-PG</div>
+          <div class="listing-desc">Should the worst occur, a structured protocol is initiated for the preservation of the American spirit and public safety compliance.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/gbgbnjpLswc" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 8 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>04:45 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">DELEGATE</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-PG</div>
+          <div class="listing-desc">Educational broadcast concerning civic duties, electoral accountability, and mandatory structural participation guidelines.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/VbT7_k3L8j4" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 9 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>05:15 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">REALITY'S EDGE</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-PG</div>
+          <div class="listing-desc">An experimental late-night broadcast analyzing perceptual boundaries and cognitive retention during sensory deprivation.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/Xq4y1W7vPzM" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 10 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>05:45 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">STAY INDOORS</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-G</div>
+          <div class="listing-desc">Important civic advisory announcement regarding nocturnal curfews, hazard mitigation, and window covering mandates.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/h0h7Lw6XyQc" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 11 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>06:15 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">ANALOG HORROR RETROSPECTIVE</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-PG</div>
+          <div class="listing-desc">A deep-dive technical discussion covering vintage broadcast transmission anomalies, tape degradation, and closed-circuit storage.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/3zJ7f5M1xQo" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 12 -->
+      <div class="guide-row">
+        <div class="time-cell">
+          <span>07:00 AM</span>
+        </div>
+        <div class="listing-cell">
+          <div class="listing-title">INTRUDER ALERT</div>
+          <div class="listing-meta">CH. 58 &bull; WCLV-TV &bull; TV-PG</div>
+          <div class="listing-desc">Emergency alert notification regarding unauthorized domestic presences. Secure all entry points and await authorized assistance.</div>
+          <div class="video-container">
+            <iframe src="https://www.youtube-nocookie.com/embed/38qHXwNRfHQ" allowfullscreen></iframe>
+          </div>
         </div>
       </div>
 
